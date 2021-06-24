@@ -4,8 +4,7 @@ LDFLAGS=-lm
 DEL=rm -fr
 
 main: main.cpp funciones.o
-	$(CXX) $(CXXFLAGS) -o app main.cpp funciones.o$(LDFLAGS)
-
+	$(CXX) $(CXXFLAGS) -o app main.cpp funciones.o $(LDFLAGS)
 
 funciones.o: funciones.h funciones.cpp
 	$(CXX) $(CXXFLAGS) -c funciones.cpp

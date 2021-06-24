@@ -8,6 +8,10 @@ using namespace std;
 int main() {
     
 
+    Datos Ventas[20000];
+
+    leerArchivo(Ventas);
+
 
     return 0;
 }
