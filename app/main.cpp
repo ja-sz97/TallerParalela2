@@ -7,11 +7,9 @@ using namespace std;
 
 int main() {
     
-
     Datos Ventas[20000];
-
     leerArchivo(Ventas);
-
+    mostrarStruct(Ventas);
 
     return 0;
 }

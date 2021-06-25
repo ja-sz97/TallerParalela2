@@ -7,6 +7,7 @@
 #include <string.h>
 #include "funciones.h"
 
+using namespace std;
 /* 
 El nombramiento de las funciones y de las variables se hará con el formato 
 camelCase especificamente con lowerCamelCase y en español
@@ -34,21 +35,45 @@ string normalizar(string palabra)
 }
 
 string separarFecha(string created)
-{
-
+{   
+    
     string fecha;
 
-    for (int i = 0; i <= created.length(); i++)
+    for (int i = 0; i <= 10; i++)
     {
-        fecha[i] = created[i];
+        fecha += created[i];
 
         if (created[i] == ' ')
         {
-            break;
+            i=10;
         }
     }
-
     return fecha;
+}
+
+void rellenarStruct(Datos Ventas[], string fecha){
+    for(int i=0; i<20000 ; i++){
+    if(Ventas[i].created == ""){
+        Ventas[i].created = fecha;
+        Ventas[i].ventasTotales += 1;
+        i = 20000;
+    }
+    else{
+        if(Ventas[i].created == fecha){
+            Ventas[i].ventasTotales += 1 ;
+            i = 20000;
+        }
+    }
+    }
+}
+
+void mostrarStruct(Datos Ventas[]){
+    for(int i= 0 ; i<20000; i++){
+        if(Ventas[i].created!=""){
+            cout << i << endl;
+            cout << Ventas[i].created << endl;
+            cout << Ventas[i].ventasTotales << endl;}
+    }
 }
 
 /*
@@ -59,7 +84,7 @@ void leerArchivo(Datos Ventas[])
 {
     //Declaracion de variables
     ifstream archivo;
-    string linea, fecha, hora, created, name, _sku, _quantity, _amount;
+    string linea, hora, created, fecha, name, _sku, _quantity, _amount;
     int sku, quantity, amount;
 
     //Abrir archivo .csv con permiso de lectura
@@ -73,7 +98,8 @@ void leerArchivo(Datos Ventas[])
     {
         int i = 1;
         while (getline(archivo, linea))
-        {
+        {   
+            if(i >1  ){
             //Lectura linea por linea, separando por ";" y asignando a variables
             stringstream stream(linea);
             getline(stream, created, ';');
@@ -84,16 +110,8 @@ void leerArchivo(Datos Ventas[])
 
             //Normalizar las variables para quitar formato con comillas
             created = normalizar(created);
-
-            
-
             fecha =  separarFecha(created);
-
-
-
-            Ventas[i].created = created;
-
-            cout << fecha << endl;
+            rellenarStruct(Ventas,fecha);
 
             _sku = normalizar(_sku);
             _quantity = normalizar(_quantity);
@@ -103,7 +121,7 @@ void leerArchivo(Datos Ventas[])
             //Cambiamos el tipo de variable de los datos, de string a int o floar
             sku = atoi(_sku.c_str());
             quantity = atoi(_quantity.c_str());
-            amount = atoi(_amount.c_str());
+            amount = atoi(_amount.c_str());}
 
             i++;
         }
