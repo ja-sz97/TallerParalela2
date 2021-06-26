@@ -10,6 +10,6 @@ int main() {
     Datos Ventas[20000];
     leerArchivo(Ventas);
     mostrarStruct(Ventas);
-
+    regresionLineal(Ventas);
     return 0;
 }

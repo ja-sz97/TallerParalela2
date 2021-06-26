@@ -13,5 +13,6 @@ typedef Datos Ventas[20000];
 
 void leerArchivo(Datos Ventas []);
 void mostrarStruct(Datos Ventas []);
+void regresionLineal(Datos Ventas[]);
 
 #endif //APP_FUNCIONES_H

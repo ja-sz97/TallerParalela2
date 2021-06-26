@@ -16,6 +16,37 @@ camelCase especificamente con lowerCamelCase y en español
 /*
 Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
 */
+void regresionLineal(Datos Ventas[]){
+    float promedioPeriodos=0;
+    float promedioVentas=0;
+    int i=1;
+    float pendiente;
+    float Sxy = 0;
+    float Sxx = 0;
+    float alfa = 0;
+    while(Ventas[i-1].created !=""){
+
+        promedioPeriodos += i;
+        promedioVentas += Ventas[i-1].ventasTotales;
+        i++;
+    }
+    promedioPeriodos /= i-1;
+    promedioVentas /= i-1;
+
+    cout<<promedioPeriodos<<endl;
+    cout<<promedioVentas<<endl;
+    
+    for (int i = 1; i<200 ; i++ ){
+        Sxy += ((i-1)*promedioPeriodos) * (Ventas[i-1].ventasTotales * promedioVentas);
+        Sxx += ((i-1)*promedioPeriodos)*((i-1)*promedioPeriodos);
+    } 
+    pendiente = Sxy/Sxx;
+    alfa = promedioVentas - (pendiente * promedioPeriodos);
+    cout<<pendiente<<endl;
+    cout<<alfa<<endl; 
+    cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
+
+    }
 string normalizar(string palabra)
 {
 
