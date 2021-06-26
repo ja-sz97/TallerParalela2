@@ -16,37 +16,38 @@ camelCase especificamente con lowerCamelCase y en español
 /*
 Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
 */
+
 void regresionLineal(Datos Ventas[]){
-    float promedioPeriodos=0;
-    float promedioVentas=0;
+    float promedioPeriodos = 0;
+    float promedioVentas = 0;
     int i=1;
-    float pendiente;
-    float Sxy = 0;
-    float Sxx = 0;
-    float alfa = 0;
+    float pendiente; //b
+    float Sxy = 0; //sumatoria de periodos*ventas
+    float Sx = 0; //sumatoria de periodos
+    float Sy = 0; //sumatoria de ventas
+    float Sxx = 0; //sumatoria de periodos^2
+    float alfa = 0; //a
     while(Ventas[i-1].created !=""){
 
-        promedioPeriodos += i;
-        promedioVentas += Ventas[i-1].ventasTotales;
+        Sx += i;
+        Sy += Ventas[i-1].ventasTotales;
         i++;
     }
-    promedioPeriodos /= i-1;
-    promedioVentas /= i-1;
-
-    cout<<promedioPeriodos<<endl;
-    cout<<promedioVentas<<endl;
-    
-    for (int i = 1; i<200 ; i++ ){
-        Sxy += ((i-1)*promedioPeriodos) * (Ventas[i-1].ventasTotales * promedioVentas);
-        Sxx += ((i-1)*promedioPeriodos)*((i-1)*promedioPeriodos);
+    promedioPeriodos = Sx / (i-1);
+    promedioVentas = Sy/ (i-1);
+    for (int j = 1; j<200 ; j++ ){
+        //Sxy += ((i)*promedioPeriodos) * (Ventas[i-1].ventasTotales * promedioVentas);
+        //Sxx += ((i)*promedioPeriodos)*((i)*promedioPeriodos);
+        Sxy += j * Ventas[j-1].ventasTotales;
+        Sxx += j*j;
     } 
-    pendiente = Sxy/Sxx;
+    pendiente = (((i-1)*Sxy) - (Sx*Sy)) / (((i-1)*Sxx) - (Sx*Sx));
     alfa = promedioVentas - (pendiente * promedioPeriodos);
-    cout<<pendiente<<endl;
-    cout<<alfa<<endl; 
+    cout<< "pendiente : "<<pendiente<<endl;
+    cout<<"alfa : "<<alfa<<endl; 
     cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
-
     }
+
 string normalizar(string palabra)
 {
 
@@ -101,9 +102,9 @@ void rellenarStruct(Datos Ventas[], string fecha){
 void mostrarStruct(Datos Ventas[]){
     for(int i= 0 ; i<20000; i++){
         if(Ventas[i].created!=""){
-            cout << i << endl;
-            cout << Ventas[i].created << endl;
-            cout << Ventas[i].ventasTotales << endl;}
+            cout << "dia : "<< i+1 << endl;
+            cout << "fecha : "<< Ventas[i].created << endl;
+            cout << "ventas : "<<Ventas[i].ventasTotales << endl;}
     }
 }
 
