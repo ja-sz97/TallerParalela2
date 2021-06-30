@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "funciones.h"
-
+#include <cmath>
 using namespace std;
 /* 
 El nombramiento de las funciones y de las variables se hará con el formato 
@@ -16,6 +16,70 @@ camelCase especificamente con lowerCamelCase y en español
 /*
 Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
 */
+void gaussJordan(float m[][3]){
+      cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
+
+     float piv,x,y;
+     int i,ii,j;
+      for(i=0;i<2;i++)
+      {
+          for (ii=0;ii<2;ii++)
+          {
+               if (ii!=i)
+               {
+                x = - m[i][i];
+                y=  m[ii][i];
+                for (j=0;j<2+1;j++)
+                    m[ii][j]=m[ii][j]/y*x+m[i][j];
+                }
+          }
+      }
+      cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
+
+}
+void exponencial(Datos Ventas[]){
+    // Ecuacion 1 -> Sumatoria V = K*Sumatoria X + N*L
+    float Sv=0; // Sumatoria del logaritmo natural de la variable "y" (SUMATORIA V)
+    int Sx=0; // Sumatoria de los periodos (VARIABLE K) 
+    int Sl=0; // Sumatoria de la cantidad de datos (VARIABLE L)
+    // Ecuacion 2 
+    float Sxv=0; // Sumatoria de los valores de x*v
+    float Sxx=0; // Sumatoria de los periodos^2 (VARIABLE K)
+    float Slx=0; // Sumatoria de la cantidad de datos * los periodos (VARIABLE L)
+    float matriz[2][3];
+    //Resultados
+    float K, L;
+
+    for (int i=1; i<10; i++){
+        //Ecuacion 1
+        Sv += log(Ventas[i-1].ventasTotales);
+        Sx += i;
+        Sl++;
+    }   
+    matriz[0][0]=Sx;
+    matriz[0][1]=Sl;
+    matriz[0][2]=Sv;
+    for (int i=1; i<10; i++){
+        //Ecuacion 2
+        Sxv += i * log(Ventas[i-1].ventasTotales);
+        Sxx = i * i; 
+        Slx += i;
+    }   
+    matriz[1][0]=Sxx;
+    matriz[1][1]=Slx;
+    matriz[1][2]=Sxv;
+    cout << "Sv : " << Sv << " Sx : " << Sx << " Sl : " << Sl << " Sxv: " << Sxv << " Sxx : " << Sxx << " Slx : "<< Slx << endl;
+
+    //Se obtiene ahora las variables K Y L
+
+    gaussJordan(matriz);
+    K = matriz[0][2]/matriz[0][0];
+    L = matriz[1][2]/matriz[1][1];
+
+
+    cout << "Valor de K: "<< K << " Valor de L: "<< L <<  endl;
+}
+
 
 void regresionLineal(Datos Ventas[]){
     float promedioPeriodos = 0;
@@ -28,9 +92,9 @@ void regresionLineal(Datos Ventas[]){
     float Sxx = 0; //sumatoria de periodos^2
     float alfa = 0; //a
     while(Ventas[i-1].created !=""){
-
         Sx += i;
         Sy += Ventas[i-1].ventasTotales;
+        
         i++;
     }
     promedioPeriodos = Sx / (i-1);
@@ -43,9 +107,9 @@ void regresionLineal(Datos Ventas[]){
     } 
     pendiente = (((i-1)*Sxy) - (Sx*Sy)) / (((i-1)*Sxx) - (Sx*Sx));
     alfa = promedioVentas - (pendiente * promedioPeriodos);
-    cout<< "pendiente : "<<pendiente<<endl;
-    cout<<"alfa : "<<alfa<<endl; 
-    cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
+    //cout<< "pendiente : "<<pendiente<<endl;
+    //cout<<"alfa : "<<alfa<<endl; 
+    //cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
     }
 
 string normalizar(string palabra)
