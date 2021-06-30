@@ -7,19 +7,19 @@
 #include <string.h>
 #include "funciones.h"
 #include <cmath>
+#include <math.h>
 using namespace std;
 /* 
 El nombramiento de las funciones y de las variables se hará con el formato 
 camelCase especificamente con lowerCamelCase y en español
 */
 
-/*
-Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
-*/
-void gaussJordan(float m[][3]){
+
+// Esta funcion resuelve un sistema de ecuacion 2x2
+void resolverSistema(float m[][3]){
       cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
 
-     float piv,x,y;
+     float x,y;
      int i,ii,j;
       for(i=0;i<2;i++)
       {
@@ -34,10 +34,13 @@ void gaussJordan(float m[][3]){
                 }
           }
       }
-      cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
+      //cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
 
 }
 void exponencial(Datos Ventas[]){
+    // Ecuacion exponencial de la forma Y=AB^(KX) / aplicar logaritmo
+    // Quedando Logb (y) = KX + Logb (A)
+    // Reemplazando V = KX + L 
     // Ecuacion 1 -> Sumatoria V = K*Sumatoria X + N*L
     float Sv=0; // Sumatoria del logaritmo natural de la variable "y" (SUMATORIA V)
     int Sx=0; // Sumatoria de los periodos (VARIABLE K) 
@@ -48,9 +51,13 @@ void exponencial(Datos Ventas[]){
     float Slx=0; // Sumatoria de la cantidad de datos * los periodos (VARIABLE L)
     float matriz[2][3];
     //Resultados
-    float K, L;
+    float K=0; // Valor K de la ecuacion original
+    float L=0; // Valor L -> L=Ln(A)
+    float A=0; // Valor A de la ecuacion original
+    //Variables
+    float Euler = 2.71828;
 
-    for (int i=1; i<10; i++){
+    for (int i=1; i<200; i++){
         //Ecuacion 1
         Sv += log(Ventas[i-1].ventasTotales);
         Sx += i;
@@ -59,10 +66,10 @@ void exponencial(Datos Ventas[]){
     matriz[0][0]=Sx;
     matriz[0][1]=Sl;
     matriz[0][2]=Sv;
-    for (int i=1; i<10; i++){
+    for (int i=1; i<200; i++){
         //Ecuacion 2
         Sxv += i * log(Ventas[i-1].ventasTotales);
-        Sxx = i * i; 
+        Sxx += i * i; 
         Slx += i;
     }   
     matriz[1][0]=Sxx;
@@ -72,12 +79,19 @@ void exponencial(Datos Ventas[]){
 
     //Se obtiene ahora las variables K Y L
 
-    gaussJordan(matriz);
+    resolverSistema(matriz);
     K = matriz[0][2]/matriz[0][0];
     L = matriz[1][2]/matriz[1][1];
 
 
     cout << "Valor de K: "<< K << " Valor de L: "<< L <<  endl;
+
+    // Se obtiene el valor de A
+    A = pow(Euler,L);
+
+    cout << "Ecuacion exponencial: Y=" << A << "^(" << K << "X)" << endl;  
+
+
 }
 
 
@@ -112,6 +126,10 @@ void regresionLineal(Datos Ventas[]){
     //cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
     }
 
+
+/*
+Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
+*/
 string normalizar(string palabra)
 {
 
