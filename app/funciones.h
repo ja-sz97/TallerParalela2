@@ -18,5 +18,6 @@ void mostrarStruct(Datos Ventas []);
 void regresionLineal(Datos Ventas[]);
 void exponencial(Datos Ventas[]);
 void suavizacionExponencial(Datos Ventas[]);
+void mediasMovilesSimple(Datos Ventas[]);
 
 #endif //APP_FUNCIONES_H

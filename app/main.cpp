@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
                 //regresionLineal(Ventas);
                 //exponencial(Ventas);
                 //suavizacionExponencial(Ventas);
+                mediasMovilesSimple(Ventas);
                 cout << "Tarea realizada" << endl;
 
         }

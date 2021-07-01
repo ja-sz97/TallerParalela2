@@ -8,6 +8,7 @@
 #include "funciones.h"
 #include <cmath>
 #include <math.h>
+
 using namespace std;
 /* 
 El nombramiento de las funciones y de las variables se hará con el formato 
@@ -108,7 +109,6 @@ void regresionLineal(Datos Ventas[]){
     while(Ventas[i-1].created !=""){
         Sx += i;
         Sy += Ventas[i-1].ventasTotales;
-        
         i++;
     }
     promedioPeriodos = Sx / (i-1);
@@ -118,7 +118,7 @@ void regresionLineal(Datos Ventas[]){
         //Sxx += ((i)*promedioPeriodos)*((i)*promedioPeriodos);
         Sxy += j * Ventas[j-1].ventasTotales;
         Sxx += j*j;
-    } 
+    }
     pendiente = (((i-1)*Sxy) - (Sx*Sy)) / (((i-1)*Sxx) - (Sx*Sx));
     alfa = promedioVentas - (pendiente * promedioPeriodos);
     //cout<< "pendiente : "<<pendiente<<endl;
@@ -158,10 +158,30 @@ void suavizacionExponencial(Datos Ventas[]){
     cout<<"Pronostico Y(t+1) = "<<0.5<<"*"<<Ventas[198].ventasTotales<<" + "<<"(1 - "<<0.5<<")"<<"*"<<suavizar[199].ventasTotales<<endl;
 }
 
+void mediasMovilesSimple(Datos Ventas[]){
+    int n = 9; // cantidad de periodos para suavización
+    float SumatoriaTemp;
+    float promedioTemp = 0;
+    float mediasMoviles[190][2];
+    for (int i=0; i<191; i++){
+            SumatoriaTemp = 0;
+            for (int j = 0; j<9; j++){
+                SumatoriaTemp += Ventas[i+j].ventasTotales;
+                promedioTemp = SumatoriaTemp/9; 
+            }
+            mediasMoviles[i][0] =i+n;
+            mediasMoviles[i][1] =promedioTemp;
+            cout<<"n = "<<mediasMoviles[i][0] << endl;
+            cout<<"media movil = "<<mediasMoviles[i][1] << endl;
+    }
+    cout<<mediasMoviles[188][1]<<mediasMoviles[190][1]<<mediasMoviles[189][1]<<endl;
+    float pronostico = ( (0.5 * mediasMoviles[188][1]) + (1 *  mediasMoviles[190][1]) + ( 2 * mediasMoviles[189][1])) / (0.5 + 1 + 2) ;
+    cout << "Metodo de los promedios moviles: "<<endl;
+    cout << "Se hace el pronostico a partir de n que corresponde a la ultima media movil(de orden 9):"<<endl;
+    cout << "pronostico para los siguientes 9 dias ( n+1 ) es: ( 0,5 * "<<mediasMoviles[188][1]<<" + 1 * "<<mediasMoviles[190][1]<<"+ 2 * "<<mediasMoviles[189][1]<<") / ( 0,5 + 1 + 2 ) = "<<pronostico<<endl;
+    cout << "A partir de acá el pronostico está dado por: (0,5 * n-2 + 1 * n-1 + 2 * n) / (0,5 + 1 + 2) = n+1"<<endl;
+}
 
-/*
-Función que retorna un string normalizado de las variables, removiendo caracteres no deseados
-*/
 string normalizar(string palabra)
 {
 
@@ -245,7 +265,7 @@ void leerArchivo(Datos Ventas[])
         int i = 1;
         while (getline(archivo, linea))
         {   
-            if(i >1  ){
+            if(i > 1 ){
             //Lectura linea por linea, separando por ";" y asignando a variables
             stringstream stream(linea);
             getline(stream, created, ';');
