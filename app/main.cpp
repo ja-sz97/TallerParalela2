@@ -17,16 +17,15 @@ int main(int argc, char** argv) {
         if (archivo){
                 Datos Ventas[20000];
                 leerArchivo(Ventas);
-                //mostrarStruct(Ventas);
-                //regresionLineal(Ventas);
-                //exponencial(Ventas);
-                //suavizacionExponencial(Ventas);
+                regresionLineal(Ventas);
+                exponencial(Ventas);
+                suavizacionExponencial(Ventas);
                 mediasMovilesSimple(Ventas);
-                cout << "Tarea realizada" << endl;
+                cout << "Programa finalizado" << endl;
 
         }
         else{
-            cout << "no ha ingresado datos" << endl;
+            cout << "Datos mal ingresados" << endl;
         }
 
     }

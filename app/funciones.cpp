@@ -25,7 +25,6 @@ void mostrarIntegrantes(){
 
 // Esta funcion resuelve un sistema de ecuacion 2x2
 void resolverSistema(float m[][3]){
-      //cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
      float x,y;
      int i,ii,j;
       for(i=0;i<2;i++)
@@ -41,8 +40,6 @@ void resolverSistema(float m[][3]){
                 }
           }
       }
-      //cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
-
 }
 void exponencial(Datos Ventas[]){
     // Ecuacion exponencial de la forma Y=AB^(KX) / aplicar logaritmo
@@ -82,17 +79,16 @@ void exponencial(Datos Ventas[]){
     matriz[1][0]=Sxx;
     matriz[1][1]=Slx;
     matriz[1][2]=Sxv;
-    //cout << "Sv : " << Sv << " Sx : " << Sx << " Sl : " << Sl << " Sxv: " << Sxv << " Sxx : " << Sxx << " Slx : "<< Slx << endl;
 
     //Se obtiene ahora las variables K Y L
     resolverSistema(matriz);
     K = matriz[0][2]/matriz[0][0];
     L = matriz[1][2]/matriz[1][1];
-    //cout << "Valor de K: "<< K << " Valor de L: "<< L <<  endl;
 
     // Se obtiene el valor de A
     A = pow(Euler,L);
-    cout << "Ecuacion exponencial: Y=" << A << "^(" << K << "X)" << endl;  
+    cout << "----------------------------------------------------------"<<endl;
+    cout << "Ecuacion exponencial: Ventas =" << A << "^(" << K << "*Periodo)" << endl;  
 }
 
 void regresionLineal(Datos Ventas[]){
@@ -114,16 +110,13 @@ void regresionLineal(Datos Ventas[]){
     promedioPeriodos = Sx / (i-1);
     promedioVentas = Sy/ (i-1);
     for (int j = 1; j<200 ; j++ ){
-        //Sxy += ((i)*promedioPeriodos) * (Ventas[i-1].ventasTotales * promedioVentas);
-        //Sxx += ((i)*promedioPeriodos)*((i)*promedioPeriodos);
         Sxy += j * Ventas[j-1].ventasTotales;
         Sxx += j*j;
     }
     pendiente = (((i-1)*Sxy) - (Sx*Sy)) / (((i-1)*Sxx) - (Sx*Sx));
     alfa = promedioVentas - (pendiente * promedioPeriodos);
-    //cout<< "pendiente : "<<pendiente<<endl;
-    //cout<<"alfa : "<<alfa<<endl; 
-    //cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
+    cout << "----------------------------------------------------------"<<endl;
+    cout << "Ecuacion lineal: Ventas = "<< alfa <<" + "<<pendiente<<"*Periodo"<<endl;
 }
 
 //Funcion para obtener la curva suavizada exponencial con un alfa determinado(alfa = 0.5)
@@ -153,7 +146,8 @@ void suavizacionExponencial(Datos Ventas[]){
         suavizar[i].ventasTotales = pronosticoSE[i];
     }
     //Se imprime la funcion de suavizacion exponencial y su pronostico siguiente
-    cout<<"Suavizacion Exponencial"<<endl<<"-----------------------------------"<<endl;
+    cout<<"----------------------------------------------------------"<<endl;
+    cout<<"Suavizacion Exponencial"<<endl;
     cout<<"Formula general Y(t+1) = a * X(t) + (1 - a)*Y(t)"<<endl;
     cout<<"Pronostico Y(t+1) = "<<0.5<<"*"<<Ventas[198].ventasTotales<<" + "<<"(1 - "<<0.5<<")"<<"*"<<suavizar[199].ventasTotales<<endl;
 }
@@ -171,15 +165,14 @@ void mediasMovilesSimple(Datos Ventas[]){
             }
             mediasMoviles[i][0] =i+n;
             mediasMoviles[i][1] =promedioTemp;
-            cout<<"n = "<<mediasMoviles[i][0] << endl;
-            cout<<"media movil = "<<mediasMoviles[i][1] << endl;
     }
-    cout<<mediasMoviles[188][1]<<mediasMoviles[190][1]<<mediasMoviles[189][1]<<endl;
     float pronostico = ( (0.5 * mediasMoviles[188][1]) + (1 *  mediasMoviles[190][1]) + ( 2 * mediasMoviles[189][1])) / (0.5 + 1 + 2) ;
+    cout<<"----------------------------------------------------------"<<endl;
     cout << "Metodo de los promedios moviles: "<<endl;
     cout << "Se hace el pronostico a partir de n que corresponde a la ultima media movil(de orden 9):"<<endl;
     cout << "pronostico para los siguientes 9 dias ( n+1 ) es: ( 0,5 * "<<mediasMoviles[188][1]<<" + 1 * "<<mediasMoviles[190][1]<<"+ 2 * "<<mediasMoviles[189][1]<<") / ( 0,5 + 1 + 2 ) = "<<pronostico<<endl;
     cout << "A partir de acá el pronostico está dado por: (0,5 * n-2 + 1 * n-1 + 2 * n) / (0,5 + 1 + 2) = n+1"<<endl;
+    cout<<"----------------------------------------------------------"<<endl;
 }
 
 string normalizar(string palabra)
@@ -251,7 +244,6 @@ void leerArchivo(Datos Ventas[])
     //Declaracion de variables
     ifstream archivo;
     string linea, hora, created, fecha, name, _sku, _quantity, _amount;
-    int sku, quantity, amount;
 
     //Abrir archivo .csv con permiso de lectura
     archivo.open("datos.csv", ios::in);
@@ -279,15 +271,10 @@ void leerArchivo(Datos Ventas[])
             fecha =  separarFecha(created);
             rellenarStruct(Ventas,fecha);
 
-            _sku = normalizar(_sku);
-            _quantity = normalizar(_quantity);
-            _amount = normalizar(_amount);
             name = normalizar(name);
 
             //Cambiamos el tipo de variable de los datos, de string a int o floar
-            sku = atoi(_sku.c_str());
-            quantity = atoi(_quantity.c_str());
-            amount = atoi(_amount.c_str());}
+            }
 
             i++;
         }
