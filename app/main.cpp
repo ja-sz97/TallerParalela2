@@ -10,17 +10,17 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
+    // Ejecución con archivo
     if (argc > 1){
         string datos(argv[1]);
         ifstream archivo(datos);
-
-
         if (archivo){
                 Datos Ventas[20000];
                 leerArchivo(Ventas);
                 //mostrarStruct(Ventas);
                 //regresionLineal(Ventas);
-                exponencial(Ventas);
+                //exponencial(Ventas);
+                //suavizacionExponencial(Ventas);
                 cout << "Tarea realizada" << endl;
 
         }
@@ -29,8 +29,9 @@ int main(int argc, char** argv) {
         }
 
     }
+    // Ejecución sin archivo
     else{
-        cout << "no ha ingresado datos" << endl;
+        mostrarIntegrantes();
     }
 
     

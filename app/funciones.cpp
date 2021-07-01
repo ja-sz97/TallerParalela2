@@ -14,11 +14,17 @@ El nombramiento de las funciones y de las variables se hará con el formato
 camelCase especificamente con lowerCamelCase y en español
 */
 
+void mostrarIntegrantes(){
+    cout<<endl<<"========= Integrantes ========="<<endl<<endl;
+    cout<<"- Leonardo Peña Fuentes"<<endl;
+    cout<<"- Esteban Moyano Pérez"<<endl;
+    cout<<"- Javier Saavedra Zaravia"<<endl<<endl;
+}
+
 
 // Esta funcion resuelve un sistema de ecuacion 2x2
 void resolverSistema(float m[][3]){
-      cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
-
+      //cout << "dato [0][0]: " << m[0][0] << " dato [0][1]: " << m[0][1]<< " dato [0][2]: " << m[0][2]<< " dato [1][0]: " << m[1][0]<< " dato [1][1]: " << m[1][1]<< " dato [1][2]: " << m[1][2] << endl;
      float x,y;
      int i,ii,j;
       for(i=0;i<2;i++)
@@ -75,27 +81,21 @@ void exponencial(Datos Ventas[]){
     matriz[1][0]=Sxx;
     matriz[1][1]=Slx;
     matriz[1][2]=Sxv;
-    cout << "Sv : " << Sv << " Sx : " << Sx << " Sl : " << Sl << " Sxv: " << Sxv << " Sxx : " << Sxx << " Slx : "<< Slx << endl;
+    //cout << "Sv : " << Sv << " Sx : " << Sx << " Sl : " << Sl << " Sxv: " << Sxv << " Sxx : " << Sxx << " Slx : "<< Slx << endl;
 
     //Se obtiene ahora las variables K Y L
-
     resolverSistema(matriz);
     K = matriz[0][2]/matriz[0][0];
     L = matriz[1][2]/matriz[1][1];
-
-
-    cout << "Valor de K: "<< K << " Valor de L: "<< L <<  endl;
+    //cout << "Valor de K: "<< K << " Valor de L: "<< L <<  endl;
 
     // Se obtiene el valor de A
     A = pow(Euler,L);
-
     cout << "Ecuacion exponencial: Y=" << A << "^(" << K << "X)" << endl;  
-
-
 }
 
-
 void regresionLineal(Datos Ventas[]){
+
     float promedioPeriodos = 0;
     float promedioVentas = 0;
     int i=1;
@@ -124,7 +124,39 @@ void regresionLineal(Datos Ventas[]){
     //cout<< "pendiente : "<<pendiente<<endl;
     //cout<<"alfa : "<<alfa<<endl; 
     //cout << " Ventas = "<< alfa <<" + "<<pendiente<<"Periodo"<<endl;
+}
+
+//Funcion para obtener la curva suavizada exponencial con un alfa determinado(alfa = 0.5)
+void suavizacionExponencial(Datos Ventas[]){
+    Datos suavizar[200];
+    //Se comienza con el segundo valor del periodo
+    int i=2,m=3;
+    //Definimos una constante de suavizacion de 0.5
+    float alfa = 0.5; // constante de suavizacion [0,1]
+    float pronosticoSE[200]; //arreglo que contendrá los pronosticos
+    float valor1, valor2; // variables auxiliares
+    float resultadoAnterior = Ventas[0].ventasTotales;
+    pronosticoSE[m-1] = resultadoAnterior;
+
+    //Se realizan las operaciones para determinar el suavizado
+    while(Ventas[i].created != ""){
+        valor1 = alfa * Ventas[i-1].ventasTotales;
+        valor2 = (1-alfa)*resultadoAnterior;
+        pronosticoSE[m]= valor1 + valor2;
+        resultadoAnterior = pronosticoSE[m];
+        i++;
+        m++;
     }
+    //Se asignan los valores resultantes al struct general
+    for(int i=2;i<200;i++){
+        suavizar[i].created = to_string(i);
+        suavizar[i].ventasTotales = pronosticoSE[i];
+    }
+    //Se imprime la funcion de suavizacion exponencial y su pronostico siguiente
+    cout<<"Suavizacion Exponencial"<<endl<<"-----------------------------------"<<endl;
+    cout<<"Formula general Y(t+1) = a * X(t) + (1 - a)*Y(t)"<<endl;
+    cout<<"Pronostico Y(t+1) = "<<0.5<<"*"<<Ventas[198].ventasTotales<<" + "<<"(1 - "<<0.5<<")"<<"*"<<suavizar[199].ventasTotales<<endl;
+}
 
 
 /*

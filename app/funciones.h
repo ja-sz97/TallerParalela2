@@ -3,17 +3,20 @@
 
 using namespace std;
 
+//Definicion del struct
 struct Datos {
     string created;
-    int ventasTotales = 0;
+    float ventasTotales = 0;
 };
 
 typedef Datos Ventas[20000];
 
-
+//Funciones compartidas
+void mostrarIntegrantes();
 void leerArchivo(Datos Ventas []);
 void mostrarStruct(Datos Ventas []);
 void regresionLineal(Datos Ventas[]);
 void exponencial(Datos Ventas[]);
+void suavizacionExponencial(Datos Ventas[]);
 
 #endif //APP_FUNCIONES_H
